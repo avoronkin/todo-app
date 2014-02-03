@@ -3,22 +3,14 @@ var returnJson = require('../utils/returnJson');
 
 module.exports = {
     create: function () {
-        var self = this;
         var data = this.req.body;
         var todo = new Todo();
-        todo.set(data);
 
-        todo.save(function (err, t) {
-            returnJson.bind(self)(todo);
-        });
+        todo.set(data).save(returnJson.bind(this));
     },
 
     read: function (id) {
-        var self = this;
-
-        Todo.find(id, function (err, todo) {
-            returnJson.bind(self)(todo);
-        });
+        Todo.find(id, returnJson.bind(this));
     },
 
     update: function (id) {
@@ -27,9 +19,7 @@ module.exports = {
 
         Todo.find(id, function (err, todo) {
             todo.set(data);
-            todo.save(function (err, t) {
-                returnJson.bind(self)(t);
-            });
+            todo.save(returnJson.bind(self));
         });
     },
 
@@ -37,19 +27,12 @@ module.exports = {
         var self = this;
 
         Todo.find(id, function (err, todo) {
-            todo.remove(function (err, t) {
-                returnJson.bind(self)(t);
-            });
-
+            todo.remove(returnJson.bind(self));
         });
     },
 
     list: function () {
-        var self = this;
-
-        Todo.all(function (err, todos) {
-            returnJson.bind(self)(todos);
-        });
+        Todo.all(returnJson.bind(this));
     },
 
 };

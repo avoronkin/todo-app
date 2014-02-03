@@ -57,8 +57,10 @@ describe('API', function () {
         });
 
         it('read', function (done) {
+            var id = '00000000000000000000001';
+
             request(apiUrl)
-                .get(todosUrl + '/00000000000000000000001')
+                .get(todosUrl + '/' + id)
                 .end(function (err, res) {
                     var todo = res.body;
 
@@ -70,17 +72,17 @@ describe('API', function () {
         });
 
         it('update', function (done) {
+            var id = '00000000000000000000001';
+
             request(apiUrl)
-                .put(todosUrl + '/00000000000000000000001')
+                .put(todosUrl + '/' + id)
                 .send({
                     title: 'updated title',
                     completed: true
                 })
                 .end(function (err, res) {
 
-                    db.todo.findOne({
-                        _id: '00000000000000000000001'
-                    }, function (err, todo) {
+                    db.todo.findById(id, function (err, todo) {
 
                         expect(err).to.be.equal(null);
                         expect(todo.title).to.be.equal('updated title');
@@ -91,13 +93,13 @@ describe('API', function () {
         });
 
         it('delete', function (done) {
+            var id = '00000000000000000000002';
+
             request(apiUrl)
-                .del(todosUrl + '/00000000000000000000002')
+                .del(todosUrl + '/' + id)
                 .end(function (err, res) {
 
-                    db.todo.findOne({
-                        _id: '00000000000000000000002'
-                    }, function (err, todo) {
+                    db.todo.findById(id, function (err, todo) {
 
                         expect(err).to.be.equal(null);
                         expect(todo).to.be.equal(null);

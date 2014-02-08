@@ -4,7 +4,7 @@ module.exports = {
         "db": "todos-test",
     },
     "http": {
-        "port": 3000,
+        "port": 3333,
         "host": 'localhost'
     }
 };

@@ -4,7 +4,7 @@ module.exports = {
     '/todos': {
         get: todo.list,
         post: todo.create,
-        '/:todoId': {
+        '/:id': {
             get: todo.read,
             delete: todo.delete,
             put: todo.update

@@ -1,6 +1,6 @@
-var Todo = require('../models/todo');
-var returnResponse = require('../utils/returnJson');
-var api = require('../api');
+// var Todo = require('../../models/todo');
+var returnResponse = require('../../utils/returnJson');
+var api = require('../../api');
 
 module.exports = {
     create: function () {

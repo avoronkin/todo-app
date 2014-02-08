@@ -1,12 +1,13 @@
 var connect = require('connect');
 var http = require('http');
-// var config = require('./config');
-var restServer = require('./restServer');
-var app = connect();
+var mainApp = connect();
+var restApp = require('./restApp');
+var todoApp = require('./todoApp');
 
-app.use('/api', restServer);
+mainApp.use('/', todoApp);
+mainApp.use('/api', restApp);
 
-var server = http.createServer(app);
+var server = http.createServer(mainApp);
 
 exports.listen = function () {
     server.listen.apply(server, arguments);

@@ -1,19 +1,18 @@
 var connect = require('connect');
-var restServerRoutingTable = require('./routes/apiRoutingTable');
+var routes = require('./routes');
 var Router = require('director').http.Router;
 
-var router = new Router();
+var router = new Router(routes);
 router.parse = function () {};
 router.param('id', /(\w+)/);
-router.mount(restServerRoutingTable);
 
-var restServer = connect()
+var todoApp = connect()
     // .use(connect.logger('dev'))
-    .use(connect.json())
+    // .use(connect.json())
     .use(function (req, res, next) {
         router.dispatch(req, res, function (err) {
             if (err === undefined || err) next();
         });
     });
 
-module.exports = restServer;
+module.exports = todoApp;

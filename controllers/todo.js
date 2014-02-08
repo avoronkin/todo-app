@@ -1,38 +1,35 @@
 var Todo = require('../models/todo');
-var returnJson = require('../utils/returnJson');
+var returnResponse = require('../utils/returnJson');
+var api = require('../api');
 
 module.exports = {
     create: function () {
         var data = this.req.body;
-        var todo = new Todo();
 
-        todo.set(data).save(returnJson.bind(this));
+        returnResponse.bind(this)(api.todo.create(data), 201);
     },
 
     read: function (id) {
-        Todo.find(id, returnJson.bind(this));
+        returnResponse.bind(this)(api.todo.read(id), 200);
     },
 
     update: function (id) {
-        var self = this;
         var data = this.req.body;
 
-        Todo.find(id, function (err, todo) {
-            todo.set(data);
-            todo.save(returnJson.bind(self));
-        });
+        returnResponse.bind(this)(api.todo.update(id, data), 200);
     },
 
     delete: function (id) {
-        var self = this;
-
-        Todo.find(id, function (err, todo) {
-            todo.remove(returnJson.bind(self));
-        });
+        returnResponse.bind(this)(api.todo.delete(id), 204);
     },
 
     list: function () {
-        Todo.all(returnJson.bind(this));
+        var self = this;
+        // Todo.all(function (err, todos) {
+        //     returnJson.bind(self)(err, {
+        //         data: todos
+        //     });
+        // });
     },
 
 };

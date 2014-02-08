@@ -1,4 +1,6 @@
-var expect = require('chai').expect;
+var chai = require('chai');
+var expect = chai.expect;
+var should = chai.should();
 var request = require('supertest');
 var mongo = require('mongoskin');
 var config = require('../../../config');
@@ -19,7 +21,7 @@ var todosFixture = [{
 }];
 
 
-describe('API', function () {
+describe('REST API', function () {
     before(function (done) {
         server.listen(config.http.port, done);
     });
@@ -41,9 +43,12 @@ describe('API', function () {
                 .post(todosUrl)
                 .send({
                     title: 'test title',
-                    completed: false
+                    completed: false,
+                    ups: 'ups'
                 })
                 .end(function (err, res) {
+
+                    res.statusCode.should.be.equal(201);
 
                     db.todo.findOne({
                         title: 'test title'
@@ -51,24 +56,41 @@ describe('API', function () {
 
                         expect(err).to.be.equal(null);
                         expect(todo).to.exist;
+                        expect(todo.ups).not.exist;
+                        todo.completed.should.be.equal(false);
+                        todo.title.should.be.equal('test title');
                         done();
                     });
                 });
         });
 
-        it('read', function (done) {
-            var id = '00000000000000000000001';
+        describe('read', function () {
+            it('read', function (done) {
+                var id = '00000000000000000000001';
 
-            request(apiUrl)
-                .get(todosUrl + '/' + id)
-                .end(function (err, res) {
-                    var todo = res.body;
+                request(apiUrl)
+                    .get(todosUrl + '/' + id)
+                    .end(function (err, res) {
+                        var todo = res.body;
 
-                    expect(err).to.be.equal(null);
-                    expect(todo.title).to.be.equal('test1');
-                    expect(todo.completed).to.be.equal(false);
-                    done();
-                });
+                        expect(err).to.be.equal(null);
+                        expect(todo.title).to.be.equal('test1');
+                        expect(todo.completed).to.be.equal(false);
+                        done();
+                    });
+            });
+
+            it('should return 404 if resource not found', function(done){
+                 request(apiUrl)
+                    .get(todosUrl + '/qqwwertyuiop')
+                    .end(function (err, res) {
+                        var todo = res.body;
+
+                        expect(err).to.be.equal(null);
+                        res.statusCode.should.to.be.equal(404);
+                        done();
+                    });
+            });
         });
 
         it('update', function (done) {
@@ -109,17 +131,17 @@ describe('API', function () {
         });
 
 
-        it('read list', function (done) {
-            request(apiUrl)
-                .get(todosUrl)
-                .end(function (err, res) {
+        // it('read list', function (done) {
+        //     request(apiUrl)
+        //         .get(todosUrl)
+        //         .end(function (err, res) {
+        //             var todos = res.body;
 
-                    var todos = res.body;
-                    expect(todos).to.be.deep.equal(todosFixture);
-                    expect(err).to.be.equal(null);
-                    done();
-                });
-        });
+        //             expect(todos).to.be.deep.equal(todosFixture);
+        //             expect(err).to.be.equal(null);
+        //             done();
+        //         });
+        // });
     });
 
 });

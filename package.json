@@ -16,7 +16,8 @@
     "q": "~1.0.0",
     "modella-defaults": "0.0.1",
     "modella-validators": "0.0.9",
-    "chai-as-promised": "~4.1.0"
+    "chai-as-promised": "~4.1.0",
+    "connect-render": "~0.3.2"
   },
   "devDependencies": {
     "mocha": "~1.17.1",

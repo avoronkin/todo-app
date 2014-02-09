@@ -10,13 +10,13 @@ module.exports = {
     },
 
     read: function (id) {
-        returnResponse.bind(this)(api.todo.read(id), 200);
+        returnResponse.bind(this)(api.todo.read(id));
     },
 
     update: function (id) {
         var data = this.req.body;
 
-        returnResponse.bind(this)(api.todo.update(id, data), 200);
+        returnResponse.bind(this)(api.todo.update(id, data));
     },
 
     delete: function (id) {
@@ -24,12 +24,7 @@ module.exports = {
     },
 
     list: function () {
-        var self = this;
-        // Todo.all(function (err, todos) {
-        //     returnJson.bind(self)(err, {
-        //         data: todos
-        //     });
-        // });
+        returnResponse.bind(this)(api.todo.list());
     },
 
 };

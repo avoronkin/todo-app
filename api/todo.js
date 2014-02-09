@@ -24,9 +24,9 @@ module.exports = {
             if (error) {
                 deferred.reject(new Error(error));
             }
-            if(!todo){
+            if (!todo) {
                 deferred.reject(new Error('Not found'));
-            }else {
+            } else {
                 deferred.resolve(todo);
             }
         });
@@ -63,7 +63,7 @@ module.exports = {
         var deferred = Q.defer();
 
         this.read(id).then(function (todo) {
-            if(todo){
+            if (todo) {
                 todo.remove(function (error) {
                     if (error) {
                         deferred.reject(new Error(error));
@@ -71,12 +71,26 @@ module.exports = {
                         deferred.resolve();
                     }
                 });
-            }else{
+            } else {
                 deferred.reject(new Error('todo not found'));
             }
 
         }).fail(function (error) {
             deferred.reject(new Error(error));
+        });
+
+        return deferred.promise;
+    },
+
+    list: function (offset, limit) {
+        var deferred = Q.defer();
+
+        Todo.all(function (error, todos) {
+            if (error) {
+                deferred.reject(new Error(error));
+            } else {
+                deferred.resolve(todos);
+            }
         });
 
         return deferred.promise;

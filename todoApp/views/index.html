@@ -1,1 +1,56 @@
-hello world
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <form action="/" method="post" class="form-inline" accept-charset="utf-8">
+                    <div class="form-group">
+                        <input type="text" name="title" class="form-control" placeholder="What needs to be done?"/>
+                    </div>
+                    <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
+                </form>
+            </div>
+            <% if(todos.length){%>
+            <table class="table table-striped">
+                <% todos.forEach(function(todo){%>
+                <tr>
+                    <td>
+                        <%if(todo.completed){%>
+                        <form action="/uncomplete/<%=todo._id %>" method="post">
+                            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-check"></span></button>
+                        </form>
+                        <%}else{%>
+                        <form action="/complete/<%=todo._id %>" method="post">
+                            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-unchecked"></span></button>
+                        </form>
+                        <%}%>
+                    </td>
+                    <% if(todo._id && todo._id == current ){ %>
+                    <td>
+                        <form action="/update/<%= todo._id %>" method="post" accept-charset="utf-8" class="form-inline">
+                            <div class="form-group">
+                                <input type="text" name="title" value="<%= todo.title %>" class="form-control"/>
+                            </div>
+                            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-floppy-save"></span></button>
+                        </form>
+                    </td>
+                    <% }else{%>
+                    <td>
+                        <span <%if(todo.completed){%>style="text-decoration:line-through;"<%}%>><%= todo.title %></span>
+                        <a href="/edit/<%=todo._id %>" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span></a>
+                    </td>
+                    <%}%>
+                    <td>
+                        <form action="/delete/<%=todo._id %>" method="post">
+                            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
+                        </form>
+                    </td>
+
+
+
+                </tr>
+                <%})%>
+            </table>
+            <%}%>
+        </div>
+    </div>
+</div>

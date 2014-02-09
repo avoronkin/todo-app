@@ -4,7 +4,7 @@
             <div class="panel-heading">
                 <form action="/" method="post" class="form-inline" accept-charset="utf-8">
                     <div class="form-group">
-                        <input type="text" name="title" class="form-control" placeholder="What needs to be done?"/>
+                        <input type="text" name="title" class="form-control" placeholder="What needs to be done?" <% if(!current){%>autofocus<%}%>/>
                     </div>
                     <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
                 </form>
@@ -28,7 +28,7 @@
                     <td>
                         <form action="/update/<%= todo._id %>" method="post" accept-charset="utf-8" class="form-inline">
                             <div class="form-group">
-                                <input type="text" name="title" value="<%= todo.title %>" class="form-control"/>
+                                <input type="text" name="title" value="<%= todo.title %>" class="form-control" autofocus />
                             </div>
                             <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-floppy-save"></span></button>
                         </form>

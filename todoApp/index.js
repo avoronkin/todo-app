@@ -10,6 +10,7 @@ router.param('id', /(\w+)/);
 
 var todoApp = connect()
     .use(connect.urlencoded())
+    // .use(connect.logger('dev'))
     .use(connect.static(__dirname + '/public'))
     .use(redirect())
     .use(render({

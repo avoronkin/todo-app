@@ -10,16 +10,7 @@ var db = mongo.db(config.mongo.host + '/' + config.mongo.db, {
 var apiUrl = 'http://' + config.http.host + ':' + config.http.port + '/api/';
 var server = require('../../../server');
 
-var todosFixture = [{
-    _id: '00000000000000000000001',
-    title: 'test1',
-    completed: false
-}, {
-    _id: '00000000000000000000002',
-    title: 'test2',
-    completed: false
-}];
-
+var todosFixture = require('../../fixtures/todo') 
 
 describe('REST API', function () {
     before(function (done) {

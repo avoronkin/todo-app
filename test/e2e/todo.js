@@ -22,12 +22,14 @@ var options = {
         browserName: 'chrome'
     }
 };
+var client;
 
 describe('e2e', function () {
     before(function (done) {
         this.timeout(25000);
 
         async.parallel([
+
             function (callback) {
                 db.todo.drop(function () {
                     console.log('Dropping todos collection');
@@ -47,7 +49,8 @@ describe('e2e', function () {
                     selenium = sel;
                     options.port = selenium.port;
                     options.host = selenium.host;
-                    callback(false);
+
+                    client = wd.remote(options).init(callback);
                 });
             }
         ], function (err) {
@@ -60,16 +63,16 @@ describe('e2e', function () {
     });
 
     after(function (done) {
-        async.parallel([
+        async.series([
+            server.close,
+            client.end.bind(client),
             function (callback) {
                 selenium.on('close', function () {
+                    console.log('selenium closed');
                     callback(false);
                 });
                 selenium.kill();
             },
-            function (callback) {
-                server.close(callback);
-            }
         ], function (err) {
             if (err) return done(err);
             done();
@@ -79,16 +82,12 @@ describe('e2e', function () {
     it('should  find title', function (done) {
         this.timeout(25000);
 
-        wd.remote(options)
-            .init()
-            .url('http://www.google.com')
+        client.url('http://www.google.com')
             .setValue('*[name="q"]', 'webdriverjs')
             .click('*[name="btnG"]')
             .pause(1000)
             .getTitle(function (err, title) {
                 title.should.be.equal('webdriverjs - Поиск в Google');
-            })
-            .end(function () {
                 done();
             });
     });

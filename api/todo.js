@@ -49,7 +49,7 @@ module.exports = {
                     }
                 });
             } else {
-                deferred.reject(new Error('todo not found'));
+                deferred.reject(new Error('Not found'));
             }
 
         }).fail(function (error) {
@@ -72,7 +72,7 @@ module.exports = {
                     }
                 });
             } else {
-                deferred.reject(new Error('todo not found'));
+                deferred.reject(new Error('Not found'));
             }
 
         }).fail(function (error) {

@@ -1,11 +1,19 @@
 function returnJson(data, status) {
     var status = status || 200;
     var data = data || null;
+    var contentType = 'application/json';
+    var output = JSON.stringify(data);
+
+    // console.log('req', this.req)
+    if (this.req.query.callback) {
+        contentType = 'application/javascript';
+        output = this.req.query.callback + '(' + output + ')';
+    }
 
     this.res.writeHead(status, {
-        'Content-Type': 'application/json'
+        'Content-Type': contentType
     });
-    this.res.end(JSON.stringify(data));
+    this.res.end(output);
 }
 
 function getErrorStatus(error) {

@@ -4,27 +4,8 @@ version: v0.1
 baseUri: http://localhost:3000/api
 /todos:
   displayName: todos
-  post:
-    body: 
-      application/json:
-        example: |
-          {
-          "completed": false,
-          "title": "qwerty"
-          }
-    description: add new todo
-    responses:
-      201:
-        body:
-          application/json:
-            example: |
-              {
-              "completed": false,
-              "title": "qwerty",
-              "_id": "5303c8c9e3ff550f30000002"
-              }
   get:
-    description: read todos collection
+    description: "read todos collection"
     responses:
       200:
         body:
@@ -39,6 +20,26 @@ baseUri: http://localhost:3000/api
               "title":"test2",
               "completed":false
               }]
+  post:
+    body: 
+      application/json:
+        example: |
+          {
+          "completed": false,
+          "title": "qwerty"
+          }
+    description: "add new todo"
+    responses:
+      201:
+        body:
+          application/json:
+            example: |
+              {
+              "completed": false,
+              "title": "qwerty",
+              "_id": "5303c8c9e3ff550f30000002"
+              }
+
   /{todoId}:
     uriParameters:
       todoId:
@@ -46,7 +47,7 @@ baseUri: http://localhost:3000/api
         type: string
         example: "5303c8c9e3ff550f30000002"
     get:
-      description: read todo  
+      description: "read todo"
       responses:
         200:
           body:

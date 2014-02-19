@@ -1,7 +1,7 @@
 function returnJson(data, status) {
     var status = status || 200;
     var data = data || null;
-    var contentType = 'application/json';
+    var contentType = 'application/json; charset=utf-8';
     var output = JSON.stringify(data);
 
     // console.log('req', this.req)
@@ -11,7 +11,7 @@ function returnJson(data, status) {
     }
 
     this.res.writeHead(status, {
-        'Content-Type': contentType
+        'content-type': contentType
     });
     this.res.end(output);
 }

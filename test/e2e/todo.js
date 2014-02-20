@@ -1,4 +1,8 @@
 var chai = require('chai');
+var chaiAsPromised = require("chai-as-promised");
+chai.use(chaiAsPromised);
+
+
 var expect = chai.expect;
 var should = chai.should();
 var async = require('async');
@@ -15,13 +19,22 @@ var todosFixture = require('../fixtures/todo');
 var server = require('../../server');
 
 var launcher = require('selenium-launcher');
-var wd = require('webdriverjs');
+var wd = require('wd');
+chaiAsPromised.transferPromiseness = wd.transferPromiseness;
+wd.configureHttp({
+  timeout: 60000,
+  retries: 3,
+  retryDelay: 100,
+  baseUrl: 'http://example.com/'
+});
+
 var selenium;
-var options = {
-    desiredCapabilities: {
-        browserName: 'chrome'
-    }
-};
+var options = {};
+// {
+// desiredCapabilities: {
+//     browserName: 'chrome'
+// }
+// };
 var client;
 
 describe('e2e', function () {
@@ -48,9 +61,12 @@ describe('e2e', function () {
                     }
                     selenium = sel;
                     options.port = selenium.port;
-                    options.host = selenium.host;
-
-                    client = wd.remote(options).init(callback);
+                    options.hostname = selenium.host;
+                    client = wd.promiseChainRemote(options);
+                    // client = wd.remote(options).init(callback);
+                    client.init({
+                        browserName: 'chrome'
+                    }).nodeify(done);
                 });
             }
         ], function (err) {
@@ -62,10 +78,26 @@ describe('e2e', function () {
 
     });
 
+    it('should  find title', function (done) {
+        this.timeout(25000);
+
+        return client.get('http://www.google.com')
+        .title().should.become('Google')
+        .elementByCss('input[name=q]').type('blablabla')
+        .elementByCss('[name="btnG"]').click().sleep(1000)
+        .title().should.become('blablabla - Поиск в Google');
+
+    });
+
+
+
     after(function (done) {
         async.series([
             server.close,
-            client.end.bind(client),
+            // client.end.bind(client),
+            function (callback) {
+                client.quit().nodeify(callback)
+            },
             function (callback) {
                 selenium.on('close', function () {
                     console.log('selenium closed');
@@ -74,22 +106,11 @@ describe('e2e', function () {
                 selenium.kill();
             },
         ], function (err) {
+            console.log('after')
             if (err) return done(err);
             done();
         });
     });
 
-    it('should  find title', function (done) {
-        this.timeout(25000);
-
-        client.url('http://www.google.com')
-            .setValue('*[name="q"]', 'webdriverjs')
-            .click('*[name="btnG"]')
-            .pause(1000)
-            .getTitle(function (err, title) {
-                title.should.be.equal('webdriverjs - Поиск в Google');
-                done();
-            });
-    });
 
 });
